@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tailwind": "npx tailwindcss -i ./styles/tailwind.css -o ./dist/output.css"
+    "tailwind": "npx tailwindcss -i ./styles/tailwind.css -o ./styles/output.css"
   },
   "dependencies": {
     "@faker-js/faker": "^6.0.0-alpha.7",
