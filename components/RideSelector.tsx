@@ -1,6 +1,13 @@
 import Image from 'next/image';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '../public';
+
+interface Rides {
+    iconUrl: string;
+    service: string;
+    priceMultiplier: number;
+    orderById: number;
+}
 
 const style = {
     wrapper: `h-full flex flex-col`,
@@ -16,46 +23,33 @@ const style = {
     price: `mr-[-0.8rem]`,
 }
 
-const carList = [
-    {
-        name: 'UberX',
-        image: images.UberX,
-        priceMultiplier: 1,
-    },
-    {
-        name: 'UberBlack',
-        image: images.UberBlack,
-        priceMultiplier: 1.5,
-    },
-    {
-        name: 'UberBlackSuv',
-        image: images.UberBlackSuv,
-        priceMultiplier: 1.5,
-    },
-    {
-        name: 'UberSelect',
-        image: images.UberSelect,
-        priceMultiplier: 1.5,
-    },
-    {
-        name: 'UberXL',
-        image: images.UberXL,
-        priceMultiplier: 1.5,
-    },
-];
-
 const basePrice = 1542;
 
 export const RideSelector = () => {
+    const [carList, setCarList] = useState<Rides[]>([]);
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await fetch('/api/db/getRideTypes');
+                const data = await response.json();
+                setCarList(data.data)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        })();
+    }, [])
+    
+
     return (
         <div className={style.wrapper}>
             <div className={style.title}>Choose a ride, or swipe up for more</div>
             <div className={style.carList}>
                 {carList.map((car, index) => (
                     <div key={index} className={style.car}>
-                        <Image src={car.image} alt={car.name} height={50} width={50} />
+                        <Image src={car.iconUrl} alt={car.service} height={50} width={50} />
                         <div className={style.carDetails}>
-                            <div className={style.service}>{car.name}</div>
+                            <div className={style.service}>{car.service}</div>
                             <div className={style.time}>4 min away</div>
                         </div>
                         <div className={style.priceContainer}>
